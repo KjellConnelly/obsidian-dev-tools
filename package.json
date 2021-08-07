@@ -5,7 +5,8 @@
   "main": "main.js",
   "scripts": {
     "dev": "rollup --config rollup.config.js -w",
-    "build": "rollup --config rollup.config.js --environment BUILD:production"
+    "build": "rollup --config rollup.config.js --environment BUILD:production",
+    "deployLocally": "rollup --config rollup.config.js --environment BUILD:production && mkdir obsidian-dev-tools && cp main.js obsidian-dev-tools && cp manifest.json obsidian-dev-tools && rm -r ../../../../My_Obsidian/.obsidian/plugins/obsidian-dev-tools && mv obsidian-dev-tools ../../../../My_Obsidian/.obsidian/plugins"
   },
   "keywords": [],
   "author": "",
