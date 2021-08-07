@@ -32,7 +32,7 @@ export default class ObsidianDevTools extends Plugin {
     await this.loadSettings()
     //this.addSettingTab(new SettingTab(this.app, this))
     this.addCommand({
-			id: 'Obsidian Dev Tools: Toggle Console',
+			id: 'Obsidian Dev Tools Plugin: Toggle Console',
 			name: 'Toggle Console',
 			callback: () => {
 
