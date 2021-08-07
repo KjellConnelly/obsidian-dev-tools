@@ -1484,3 +1484,14 @@ export default class ObsidianDevTools extends Plugin {
 
   }
 }
+
+
+/*
+{
+	"id": "obsidian-dev-tools",
+	"name": "Obsidian Dev Tools Plugin",
+	"description": "This plugin is initially used to view the console on mobile devices, though it may have other plugin tools added in the future.",
+	"author": "Kjell Connelly",
+	"repo": "KjellConnelly/obsidian-dev-tools"
+}
+*/
