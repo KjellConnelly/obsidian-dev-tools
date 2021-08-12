@@ -5,6 +5,14 @@ export default class ConsoleHelper {
     }
   }
 
+  log(str : string) {
+    console.log(str)
+  }
+
+  logEval(str : string) {
+    console.log(eval(str))
+  }
+
   toggle(on : boolean = true) {
     const {consolePanel, document} = window
     if (!on) {

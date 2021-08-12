@@ -20,6 +20,16 @@ export default class ObsidianDevTools extends Plugin {
 		await this.saveData(this.settings)
 	}
 
+	optionalLog(evaluate : boolean = false) {
+		let text = ''
+    if (window.getSelection) {
+      text = window.getSelection().toString();
+    }
+		if (text.length > 0) {
+	    this.consoleHelper[evaluate ? 'logEval' : 'log'](text)
+		}
+	}
+
   async onload() {
     await this.loadSettings()
 		this.consoleHelper = new ConsoleHelper(this.settings.consoleOn)
@@ -39,5 +49,35 @@ export default class ObsidianDevTools extends Plugin {
 				return false
 			}
 		})
-  }
+
+		this.addCommand({
+			id: 'Obsidian Dev Tools Plugin: console.log() Highlighted Text',
+			name: 'console.log() Highlighted Text',
+			checkCallback: (checking: boolean) => {
+				let leaf = this.app.workspace.activeLeaf
+				if (leaf) {
+					if (!checking) {
+						this.optionalLog(false)
+					}
+					return true
+				}
+				return false
+			}
+		})
+
+		this.addCommand({
+			id: 'Obsidian Dev Tools Plugin: console.log(eval) Highlighted Text',
+			name: 'console.log(eval) Highlighted Text',
+			checkCallback: (checking: boolean) => {
+				let leaf = this.app.workspace.activeLeaf
+				if (leaf) {
+					if (!checking) {
+						this.optionalLog(true)
+					}
+					return true
+				}
+				return false
+			}
+		})
+	}
 }
