@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 export default class ConsoleHelper {
   constructor(consoleStartsOn : boolean) {
     if (consoleStartsOn) {
@@ -19,9 +21,11 @@ export default class ConsoleHelper {
       if (consolePanel) {
         consolePanel.hideBecauseDevToolsIsOpen()
       } else {
+        consolePanel.showBecauseDevToolsIsClosed()
       }
     } else {
       if (consolePanel) {
+        consolePanel.showBecauseDevToolsIsClosed()
         consolePanel.showConsolePanel()
         consolePanel.hideDevToolsIconContainer()
       } else {
@@ -533,6 +537,7 @@ export default class ConsoleHelper {
           that.disable();
           that.hideDevToolsIconContainer();
           that.hideConsolePanel();
+          console.log('hide')
         };
         ConsolePanel.prototype.showBecauseDevToolsIsClosed = function() {
           var that = this;
@@ -542,6 +547,7 @@ export default class ConsoleHelper {
           } else {
             //alertNote('Enabled console-panel', null, { verticalAlignment: 'bottom', horizontalAlignment: 'right' });
           }
+          console.log('show')
         };
 
         ConsolePanel.prototype.hasStrongNotification = function() {
