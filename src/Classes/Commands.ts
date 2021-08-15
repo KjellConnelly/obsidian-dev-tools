@@ -72,15 +72,4 @@ export default class Commands {
       }
     })
   }
-
-  private load_displayAllIcons() {
-    const {plugin, commandsHelper} = this
-    commandsHelper.addCommand({
-      id: 'Obsidian Dev Tools Plugin: Show all known icons',
-			name: 'Show all known icons',
-      cb: ()=>{
-        console.log("Show all known icons: todo")
-      }
-    })
-  }
 }

@@ -1,16 +1,21 @@
 import { Plugin } from 'obsidian'
 import ConsoleHelper from './Classes/ConsoleHelper'
 import Commands from './Classes/Commands'
+import SettingTab from './Classes/SettingTab'
 
 interface MyPluginSettings {
+	[index: string]: any,
 	consoleOn: boolean,
+	consoleHeight: number,
 }
 const DEFAULT_SETTINGS: MyPluginSettings = {
 	consoleOn: false,
+	consoleHeight:250,
 }
 
-export default class ObsidianDevTools extends Plugin {
+export default class ObsidianDevToolsPlugin extends Plugin {
   settings: MyPluginSettings
+	defaultSettings: MyPluginSettings
 	consoleHelper: ConsoleHelper
 
 	async loadSettings() {
@@ -33,7 +38,9 @@ export default class ObsidianDevTools extends Plugin {
 
   async onload() {
     await this.loadSettings()
-		this.consoleHelper = new ConsoleHelper(this.settings.consoleOn)
+		this.defaultSettings = DEFAULT_SETTINGS
+		this.addSettingTab(new SettingTab(this))
+		this.consoleHelper = new ConsoleHelper(this, this.settings.consoleOn)
 		new Commands(this)
 	}
 }

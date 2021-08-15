@@ -1,7 +1,11 @@
 // @ts-nocheck
+import type ObsidianDevToolsPlugin from './../main'
 
 export default class ConsoleHelper {
-  constructor(consoleStartsOn : boolean) {
+  plugin : ObsidianDevToolsPlugin
+
+  constructor(plugin : ObsidianDevToolsPlugin, consoleStartsOn : boolean) {
+    this.plugin = plugin
     if (consoleStartsOn) {
       this.toggle(true)
     }
@@ -29,12 +33,14 @@ export default class ConsoleHelper {
         consolePanel.showConsolePanel()
         consolePanel.hideDevToolsIconContainer()
       } else {
-        this.loadConsoleInMemory()
+        this.loadConsoleInMemory(this.plugin)
       }
     }
   }
 
-  loadConsoleInMemory() {
+
+
+  loadConsoleInMemory(plugin: ObsidianDevToolsPlugin) {
     (function($) {
       if (window.consolePanel) {
         return;
@@ -537,7 +543,6 @@ export default class ConsoleHelper {
           that.disable();
           that.hideDevToolsIconContainer();
           that.hideConsolePanel();
-          console.log('hide')
         };
         ConsolePanel.prototype.showBecauseDevToolsIsClosed = function() {
           var that = this;
@@ -547,7 +552,6 @@ export default class ConsoleHelper {
           } else {
             //alertNote('Enabled console-panel', null, { verticalAlignment: 'bottom', horizontalAlignment: 'right' });
           }
-          console.log('show')
         };
 
         ConsolePanel.prototype.hasStrongNotification = function() {
@@ -1149,7 +1153,7 @@ export default class ConsoleHelper {
             } else {
               height = defaultUserPreference[getFullKey('consolePanelHeight')];
             }
-            return height + 'px';
+            return plugin.settings.consoleHeight + 'px';
           }());
 
           // Just a block
