@@ -11,25 +11,27 @@ if you want to view the source visit the plugins github repository
 */
 `;
 
-export default {
-  input: 'src/main.ts',
-  output: {
-    dir: '.',
-    sourcemap: 'inline',
-    sourcemapExcludeSources: isProd,
-    format: 'cjs',
-    exports: 'default',
-    banner,
-  },
-  external: ['obsidian'],
-  plugins: [
-    typescript(),
-    nodeResolve({browser: true}),
-    commonjs(),
-  ],
-  onwarn(warning, warn) {
-    // suppress eval warnings
-    if (warning.code === 'EVAL') return
-    warn(warning)
+export default [
+    {
+    input: 'src/main.ts',
+    output: {
+      dir: '.',
+      sourcemap: 'inline',
+      sourcemapExcludeSources: isProd,
+      format: 'cjs',
+      exports: 'default',
+      banner,
+    },
+    external: ['obsidian'],
+    plugins: [
+      typescript(),
+      nodeResolve({browser: true}),
+      commonjs(),
+    ],
+    onwarn(warning, warn) {
+      // suppress eval warnings
+      if (warning.code === 'EVAL') return
+      warn(warning)
+    }
   }
-};
+];

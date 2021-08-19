@@ -2,7 +2,7 @@
   "name": "obsidian-dev-tools",
   "version": "1.0.0",
   "description": "This plugin is for developers, to make it easier to develop. It currently allows for a modified console (useful for debugging on mobile), and viewing all Obsidian icons/strings.",
-  "main": "main.js",
+  "main": "build/main.js",
   "scripts": {
     "dev": "rollup --config rollup.config.js -w",
     "build": "rollup --config rollup.config.js --environment BUILD:production",
