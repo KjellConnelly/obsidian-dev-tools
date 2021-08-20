@@ -2,10 +2,11 @@
   "name": "obsidian-dev-tools",
   "version": "1.0.0",
   "description": "This plugin is for developers, to make it easier to develop. It currently allows for a modified console (useful for debugging on mobile), and viewing all Obsidian icons/strings.",
-  "main": "build/main.js",
+  "main": "main.js",
   "scripts": {
     "dev": "rollup --config rollup.config.js -w",
     "build": "rollup --config rollup.config.js --environment BUILD:production",
+    "buildLib": "rollup --config rollup.config.lib.js",
     "deployLocally": "rollup --config rollup.config.js --environment BUILD:production && mkdir obsidian-dev-tools && cp main.js obsidian-dev-tools && cp styles.css obsidian-dev-tools && cp manifest.json obsidian-dev-tools && mkdir -p ../../../../My_Obsidian/.obsidian/plugins/obsidian-dev-tools && rm -r ../../../../My_Obsidian/.obsidian/plugins/obsidian-dev-tools && mv obsidian-dev-tools ../../../../My_Obsidian/.obsidian/plugins"
   },
   "keywords": [],
