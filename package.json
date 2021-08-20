@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "dev": "rollup --config rollup.config.js -w",
-    "build": "rollup --config rollup.config.js --environment BUILD:production",
+    "build": "rollup --config rollup.config.js --environment BUILD:production && cp main.js build/plugin/main.js && cp manifest.json build/plugin/manifest.json && cp styles.css build/plugin/styles.css",
     "buildLib": "rollup --config rollup.config.lib.js",
     "deployLocally": "rollup --config rollup.config.js --environment BUILD:production && mkdir obsidian-dev-tools && cp main.js obsidian-dev-tools && cp styles.css obsidian-dev-tools && cp manifest.json obsidian-dev-tools && mkdir -p ../../../../My_Obsidian/.obsidian/plugins/obsidian-dev-tools && rm -r ../../../../My_Obsidian/.obsidian/plugins/obsidian-dev-tools && mv obsidian-dev-tools ../../../../My_Obsidian/.obsidian/plugins"
   },
