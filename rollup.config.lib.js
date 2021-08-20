@@ -13,9 +13,9 @@ if you want to view the source visit the plugins github repository
 
 export default [
     {
-    input: 'src/lib/main.ts',
+    input: 'src/lib/ObsidianDevLibrary.ts',
     output: {
-      file: './build/lib/lib.js',
+      file: './build/lib/ObsidianDevLibrary.js',
       sourcemap: 'inline',
       sourcemapExcludeSources: isProd,
       format: 'cjs',

@@ -1,6 +1,7 @@
 import { PluginSettingTab, Setting, Notice } from 'obsidian'
 import type ObsidianDevToolsPlugin from './../main'
 import ObsidianDevShortcuts from './ObsidianDevShortcuts'
+import ObsidianDevLibrary from '../../../src/lib/ObsidianDevLibrary'
 import icons from './../data/icons'
 
 export default class SettingsTab extends PluginSettingTab {
@@ -9,18 +10,31 @@ export default class SettingsTab extends PluginSettingTab {
 
     constructor(plugin : ObsidianDevToolsPlugin) {
       super(plugin.app, plugin)
+      plugin.devLibrary.setContainerElement(this.containerEl)
       this.plugin = plugin
       this.shortcuts = new ObsidianDevShortcuts(plugin)
     }
 
-    public display(): void {
+
+
+    public async display(): void {
       const { containerEl } = this
   		containerEl.empty()
-      const {settings} = this.plugin
+      const {settings, devLibrary} = this.plugin
 
   		containerEl.createEl('h1', {text: 'Dev Tools Settings'})
 
   		containerEl.createEl('h2', {text: "Console"})
+
+      const setting1 = await devLibrary.addSetting({name:"My Name!"})
+      const setting1_textElement = await devLibrary.addTextInputSetting(setting1, {
+        key:"TestKey",
+        placeholder:"My Placeholder!"
+      })
+
+
+
+
       this.shortcuts.addTextInputSetting({
   			containerEl:containerEl,
   			name:`Startup console height (need to restart Obsidian to take see changes):`,
@@ -57,6 +71,8 @@ export default class SettingsTab extends PluginSettingTab {
           })
         })
       }
+
+
 
       /*
   		shortcuts.addToggleInputSetting({
