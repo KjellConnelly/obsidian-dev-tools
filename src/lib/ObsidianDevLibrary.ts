@@ -11,18 +11,59 @@ export default class ObsidianDevLibrary {
 
   setContainerElement(containerEl : HTMLElement) {
     this.containerEl = containerEl
+    containerEl.empty()
   }
 
+  ///////////////////////
+  // PUBLIC
+  ///////////////////////
   // Settings can be rendered in HTML, or just plain text. Setting html:true allows html tags to render.
-  addSetting(options : {
+  public addSettingWithText(options: {
     name?: string,
     description?: string,
-    html?: boolean
-  } = {
-    html:true
-  }) : Promise<Setting> {
-    return new Promise((resolve, reject)=>{
-      const setting = new Setting(this.containerEl)
+    html?: boolean,
+    key: string,
+    placeholder?: string,
+    autoSave?: boolean,
+    onChange?: (
+      value : string,
+      component : TextComponent,
+      setting : Setting
+    )=>void,
+  }) : { setting : Setting, component : TextComponent} {
+    const { name, description, html, key, placeholder, autoSave, onChange } = options
+    const setting = this.addSetting({name,description,html})
+    const component = this.addTextInputSetting(setting, {key,placeholder,autoSave,onChange})
+    return {setting, component}
+  }
+
+  public addSettingWithToggle(options: {
+    name?: string,
+    description?: string,
+    html?: boolean,
+    key: string,
+    value?: boolean,
+    autoSave?: boolean,
+    onChange?: (
+      value : boolean,
+      component : ToggleComponent,
+      setting : Setting
+    )=>void,
+  }) : { setting : Setting, component : ToggleComponent} {
+    const { name, description, html, key, onChange, value, autoSave } = options
+    const setting = this.addSetting({name,description,html})
+    const component = this.addToggleInputSetting(setting, {key,onChange,autoSave,value})
+    return {setting, component}
+  }
+
+
+
+  private addSetting(options : {
+    name?: string,
+    description?: string,
+    html?: boolean,
+  }) : Setting {
+      const setting : Setting = new Setting(this.containerEl)
       const { name, description, html} = options
       if (name) {
         setting.setName(name)
@@ -32,72 +73,65 @@ export default class ObsidianDevLibrary {
         setting.setDesc(description)
         if (html) {setting.descEl.innerHTML = name}
       }
-      resolve(setting)
-    })
+
+      return setting
   }
 
-  addTextInputSetting(setting : Setting, options : {
+  private addTextInputSetting(setting : Setting, options : {
     key: string,
     placeholder?: string,
     autoSave?: boolean,
     onChange?: (
       value : string,
       element : TextComponent,
+      setting : Setting,
     )=>void,
-  }) : Promise<TextComponent> {
-    return new Promise((resolve, reject)=>{
-      try {
-        const { placeholder, key, autoSave, onChange, } = options
-
-        setting.addText((component: TextComponent)=> {
-          const startingString = `${this.plugin.settings[key]}`
-    			component.setValue(startingString)
-      			.onChange(async (value : string)=>{
-              if (autoSave) {
-                this.plugin.settings[key] = value
-      				  await this.plugin.saveSettings()
-              }
-              if (onChange) {
-                onChange(value, component)
-              }
-      			})
-            resolve(component)
-    		})
-      } catch(err) {
-        reject(err)
-      }
+  }) : TextComponent {
+    const { placeholder, key, autoSave, onChange, } = options
+    let component : TextComponent
+    setting.addText((comp: TextComponent)=> {
+      component = comp
+    	component.setValue(this.plugin.settings[key] || '')
+      component.setPlaceholder(placeholder || '')
+      component.onChange(async (value : string)=>{
+        if (autoSave != false) {
+          this.plugin.settings[key] = value
+          await this.plugin.saveSettings()
+        }
+        if (onChange) {
+          onChange(value, component, setting)
+        }
+      })
     })
+    return component
   }
 
-  addToggleInputSetting({
-    containerEl = undefined,
-    name = ``,
-    description = ``,
-    key = ``,
-    onChange = ()=>{},
-  } : {
-    containerEl : HTMLElement,
-    name: string,
-    description: string,
-    placeholder: string,
+  private addToggleInputSetting(setting: Setting, options : {
     key: string,
-    autoSetValue: boolean,
-    onChange: (value : boolean, toggle : ToggleComponent, setting : Setting)=>void,
-  }) {
-    const setting = new Setting(containerEl)
-    if (name.length > 0) { setting.setName(name) }
-    if (description.length > 0) { setting.setDesc(description) }
-
-		setting.addToggle(toggle=>{
-			toggle.setValue(this.plugin.settings[key])
-			toggle.onChange(async val=>{
-				this.plugin.settings[key] = val
-				await this.plugin.saveSettings()
+    value?: boolean,
+    autoSave? : boolean,
+    onChange: (
+      value : boolean,
+      toggle : ToggleComponent,
+      setting : Setting
+    )=>void,
+  }) : ToggleComponent {
+    const { key, onChange, autoSave, value } = options
+    let component : ToggleComponent
+		setting.addToggle((comp : ToggleComponent)=>{
+      component = comp
+			component.setValue((value != undefined) ? value : this.plugin.settings[key])
+			component.onChange(async (value : boolean)=>{
+        if (autoSave != false) {
+          this.plugin.settings[key] = value
+          await this.plugin.saveSettings()
+        }
         if (onChange) {
-          onChange(val, toggle, setting)
+          onChange(value, component, setting)
         }
 			})
 		})
+    return component
   }
 
   isNumberGetNumber(value: string): number | null {

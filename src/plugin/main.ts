@@ -8,10 +8,12 @@ interface MyPluginSettings {
 	[index: string]: any,
 	consoleOn: boolean,
 	consoleHeight: number,
+	todayDecalOn: boolean,
 }
 const DEFAULT_SETTINGS: MyPluginSettings = {
 	consoleOn: false,
 	consoleHeight:250,
+	todayDecalOn:false
 }
 
 export default class ObsidianDevToolsPlugin extends Plugin {

@@ -5,20 +5,38 @@ import ObsidianDevLibrary from '../../../src/lib/ObsidianDevLibrary'
 import icons from './../data/icons'
 
 export default class SettingsTab extends PluginSettingTab {
-    private readonly plugin: ObsidianDevToolsPlugin
-    private readonly shortcuts: ObsidianDevShortcuts
+  private readonly plugin: ObsidianDevToolsPlugin
+  private readonly shortcuts: ObsidianDevShortcuts
 
-    constructor(plugin : ObsidianDevToolsPlugin) {
-      super(plugin.app, plugin)
-      plugin.devLibrary.setContainerElement(this.containerEl)
-      this.plugin = plugin
-      this.shortcuts = new ObsidianDevShortcuts(plugin)
-    }
-
+  constructor(plugin : ObsidianDevToolsPlugin) {
+    super(plugin.app, plugin)
+    this.plugin = plugin
+    this.shortcuts = new ObsidianDevShortcuts(plugin)
+  }
 
 
-    public async display(): void {
-      const { containerEl } = this
+  public display(): void {
+    const { devLibrary, settings } = this.plugin
+    devLibrary.setContainerElement(this.containerEl)
+    const setting1 = devLibrary.addSettingWithText({
+      name:"New Setting",
+      key:"New Setting Key",
+      placeholder:"This is a placeholder"
+    })
+    const setting2 = devLibrary.addSettingWithToggle({
+      name:"Today's Daily Note Decal",
+      description:settings.todayDecalOn ? 'Decal Added to Navigator' : 'Decal Disabled on Navigator',
+      key:'todayDecalOn',
+      onChange:(value, toggle, setting)=>{
+        setting.setDesc(value ? 'Decal Added to Navigator' : 'Decal Disabled on Navigator')
+      }
+    })
+  }
+}
+
+
+/*
+const { containerEl } = this
   		containerEl.empty()
       const {settings, devLibrary} = this.plugin
 
@@ -73,6 +91,12 @@ export default class SettingsTab extends PluginSettingTab {
       }
 
 
+*/
+
+
+
+
+
 
       /*
   		shortcuts.addToggleInputSetting({
@@ -105,5 +129,3 @@ export default class SettingsTab extends PluginSettingTab {
   			key:'jsonDirectory',
   		})
       */
-    }
-}
