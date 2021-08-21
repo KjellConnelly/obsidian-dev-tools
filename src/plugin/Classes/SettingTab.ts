@@ -3,6 +3,7 @@ import type ObsidianDevToolsPlugin from './../main'
 import ObsidianDevShortcuts from './ObsidianDevShortcuts'
 import ObsidianDevLibrary from '../../../src/lib/ObsidianDevLibrary'
 import icons from './../data/icons'
+import { TextType, ToggleType } from '../../lib/types'
 
 export default class SettingsTab extends PluginSettingTab {
   private readonly plugin: ObsidianDevToolsPlugin
@@ -18,6 +19,12 @@ export default class SettingsTab extends PluginSettingTab {
   public display(): void {
     const { devLibrary, settings } = this.plugin
     devLibrary.setContainerElement(this.containerEl)
+    const setting1 = devLibrary.simpleAddSetting({name:"New Setting"}, [
+      {
+        placeholder:"This is a placeholder"
+      }
+    ])
+    /*
     const setting1 = devLibrary.addSettingWithText({
       name:"New Setting",
       key:"New Setting Key",
@@ -31,6 +38,7 @@ export default class SettingsTab extends PluginSettingTab {
         setting.setDesc(value ? 'Decal Added to Navigator' : 'Decal Disabled on Navigator')
       }
     })
+    */
   }
 }
 

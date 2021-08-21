@@ -1,4 +1,6 @@
 import { App, Notice, Plugin, PluginSettingTab, Setting, ToggleComponent, TFile, TAbstractFile, TextComponent, } from 'obsidian'
+import { SettingType, TextOptionType, ToggleOptionType, allSettingComponentTypes,
+  allSettingComponentOptionTypes, SettingPackageType } from './types'
 
 export default class ObsidianDevLibrary {
   plugin : any
@@ -18,6 +20,29 @@ export default class ObsidianDevLibrary {
   // PUBLIC
   ///////////////////////
   // Settings can be rendered in HTML, or just plain text. Setting html:true allows html tags to render.
+
+  public simpleAddSetting(options:SettingType, components:Array<allSettingComponentOptionTypes>) : SettingPackageType {
+    const setting : Setting = new Setting(this.containerEl)
+    const { name, description, html} = options
+    if (name) {
+      setting.setName(name)
+      if (html) {setting.nameEl.innerHTML = name}
+    }
+    if (description) {
+      setting.setDesc(description)
+      if (html) {setting.descEl.innerHTML = description}
+    }
+    console.log(components)
+    let componentsToReturn = []
+    for (let i = 0; i < components.length; i++) {
+      if (components[i] == TextOptionType) {
+        componentsToReturn.push(this.addText(settings, components[i]))
+      }
+    }
+
+    return {setting:setting, components:componentsToReturn}
+  }
+
   public addSettingWithText(options: {
     name?: string,
     description?: string,
@@ -33,7 +58,7 @@ export default class ObsidianDevLibrary {
   }) : { setting : Setting, component : TextComponent} {
     const { name, description, html, key, placeholder, autoSave, onChange } = options
     const setting = this.addSetting({name,description,html})
-    const component = this.addTextInputSetting(setting, {key,placeholder,autoSave,onChange})
+    const component = this.addText(setting, {key,placeholder,autoSave,onChange})
     return {setting, component}
   }
 
@@ -52,7 +77,7 @@ export default class ObsidianDevLibrary {
   }) : { setting : Setting, component : ToggleComponent} {
     const { name, description, html, key, onChange, value, autoSave } = options
     const setting = this.addSetting({name,description,html})
-    const component = this.addToggleInputSetting(setting, {key,onChange,autoSave,value})
+    const component = this.addToggle(setting, {key,onChange,autoSave,value})
     return {setting, component}
   }
 
@@ -77,7 +102,7 @@ export default class ObsidianDevLibrary {
       return setting
   }
 
-  private addTextInputSetting(setting : Setting, options : {
+  private addText(setting : Setting, options : {
     key: string,
     placeholder?: string,
     autoSave?: boolean,
@@ -106,7 +131,7 @@ export default class ObsidianDevLibrary {
     return component
   }
 
-  private addToggleInputSetting(setting: Setting, options : {
+  private addToggle(setting: Setting, options : {
     key: string,
     value?: boolean,
     autoSave? : boolean,
